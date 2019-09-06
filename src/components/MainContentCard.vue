@@ -11,7 +11,7 @@
             </v-list-item-content>
           </v-list-item>
           <v-card-text v-text="item.subtitle"></v-card-text>
-          <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img>
+          <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="124"></v-img>
           <v-card-actions>
             <v-btn text color="deep-purple accent-4">Read</v-btn>
             <v-btn text color="deep-purple accent-4">Bookmark</v-btn>

@@ -13,10 +13,10 @@
   </v-container>
 </template>
 <script>
-// import JobCard from "./JobCard";
-import MainContentCard from "./MainContentCard";
-import ShowcaseCard from "./ShowcaseCard";
-import AreaSearchCard from "./AreaSearchCard";
+// import JobCard from "../components/JobCard";
+import MainContentCard from "../components/MainContentCard";
+import ShowcaseCard from "../components/ShowcaseCard";
+import AreaSearchCard from "../components/AreaSearchCard";
 export default {
   data: () => ({}),
   created() {},

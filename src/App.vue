@@ -13,18 +13,18 @@
     </v-app-bar>
 
     <v-content>
-      <MainContent />
+      <Main />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import MainContent from "./components/MainContent";
+import Main from "./views/Main";
 
 export default {
   name: "App",
   components: {
-    MainContent
+    Main
   },
   data: () => ({
     //
