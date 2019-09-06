@@ -5,9 +5,10 @@
         <JobCard />
       </v-col>
       <v-col cols="6" md="4">
+        <AreaSearchCard/>
         <v-window v-model="window" class="elevation-1" vertical autorun>
           <v-window-item v-for="n in length" :key="n">
-            <ShowcaseCard/>
+            <ShowcaseCard />
           </v-window-item>
         </v-window>
       </v-col>
@@ -17,6 +18,7 @@
 <script>
 import JobCard from "./JobCard";
 import ShowcaseCard from "./ShowcaseCard";
+import AreaSearchCard from "./AreaSearchCard";
 export default {
   data: () => ({
     rating: 5,
@@ -33,7 +35,8 @@ export default {
   },
   components: {
     JobCard,
-    ShowcaseCard
+    ShowcaseCard,
+    AreaSearchCard
   }
 };
 </script>
