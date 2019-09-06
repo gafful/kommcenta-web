@@ -1,27 +1,52 @@
 <template>
-  <v-card class="mx-auto">
-    <v-img
-      class="white--text"
-      height="200px"
-      src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+  <v-card elevation="24" max-width="444" class="mx-auto">
+    <v-system-bar lights-out></v-system-bar>
+    <v-carousel
+      cycle
+      hide-delimiters
+      height="300"
+      interval="3000"
+      show-arrows-on-hover
+      vertical
     >
-      <v-card-title class="align-end fill-height">Kenkey House</v-card-title>
-    </v-img>
-    <v-card-text>0201-234-567</v-card-text>
-    <v-rating v-model="rating"></v-rating>
-    <v-card-actions>
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn text>Click</v-btn>
-      <v-btn outlined>Click</v-btn>
-    </v-card-actions>
+      <v-carousel-item v-for="(slide, i) in slides" :key="i">
+        <v-sheet :color="colors[i]" height="100%" tile>
+          <v-row class="fill-height" align="center" justify="center">
+            <div class="display-3">{{ slide }} Slide</div>
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel>
+    <v-list two-line>
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>John Leider</v-list-item-title>
+          <v-list-item-subtitle>Author</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+        </v-list-item-action>
+      </v-list-item>
+    </v-list>
   </v-card>
 </template>
 <script>
 export default {
   data: () => ({
     rating: 3,
-  }),
+    vertical: true,
+    autorun: true,
+    colors: [
+      "green",
+      "secondary",
+      "yellow darken-4",
+      "red lighten-2",
+      "orange darken-1"
+    ],
+    // cycle: true,
+    slides: ["First", "Second", "Third", "Fourth", "Fifth"]
+  })
 };
 </script>
