@@ -1,10 +1,11 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" sm="6" md="8">
-        <JobCard />
+    <v-row style="height:100vh">
+      <v-col class="main-content" cols="12" sm="6" md="8">
+        <!-- <JobCard /> -->
+        <MainContentCard />
       </v-col>
-      <v-col cols="6" md="4">
+      <v-col class="right-pane" cols="6" md="4">
         <AreaSearchCard />
         <ShowcaseCard />
       </v-col>
@@ -12,16 +13,34 @@
   </v-container>
 </template>
 <script>
-import JobCard from "./JobCard";
+// import JobCard from "./JobCard";
+import MainContentCard from "./MainContentCard";
 import ShowcaseCard from "./ShowcaseCard";
 import AreaSearchCard from "./AreaSearchCard";
 export default {
   data: () => ({}),
   created() {},
   components: {
-    JobCard,
+    // JobCard,
     ShowcaseCard,
-    AreaSearchCard
+    AreaSearchCard,
+    MainContentCard
   }
 };
 </script>
+<style scoped>
+.main-content {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.right-pane {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+html,
+body {
+  height: 100%;
+}
+</style>
