@@ -9,6 +9,14 @@
       <!-- <v-btn text href="#login" target="_blank" class="ma-2" outlined>
         <span class="mr-2">Login</span>
       </v-btn>-->
+      <!-- <template v-if="loginType === 'username'">
+        <label>Username</label>
+        <input placeholder="Enter your username">
+      </template>
+      <template v-else>
+        <label>Email</label>
+        <input placeholder="Enter your email address">
+      </template> -->
       <v-dialog v-model="dialog" max-width="290">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark v-on="on">Login</v-btn>
