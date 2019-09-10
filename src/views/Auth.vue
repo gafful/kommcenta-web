@@ -67,7 +67,15 @@
     </v-window>
 
     <div class="text-center">
-      <v-btn class="mr-4" color="indigo" tile :disabled="!isFormValid" :loading="authenticating" loader="authenticating" @click="handleSubmit">
+      <v-btn
+        class="mr-4"
+        color="indigo"
+        tile
+        :disabled="!isFormValid"
+        :loading="authenticating"
+        loader="authenticating"
+        @click="handleSubmit"
+      >
         <span>{{ currentBtn }}</span>
         <template v-slot:loader>
           <span>Loading...</span>
@@ -110,7 +118,6 @@ export default {
       passwordRules: {
         required: value => !!value || "Required.",
         min: v => v.length >= 8 || "Min 8 characters",
-        same: v => v === this.password,
         emailMatch: v => {
           return v === this.password || "The passwords you entered don't match";
         }
@@ -143,60 +150,34 @@ export default {
           return "SIGN UP";
       }
     },
-    isFormValid(){
-      if(this.step === 1){
-        return this.valid
-      }else{
-        return this.svalid
+    isFormValid() {
+      if (this.step === 1) {
+        return this.valid;
+      } else {
+        return this.svalid;
       }
     }
   },
   methods: {
     ...mapActions("auth", ["login"]),
-    // handleSubmit() {
-    //   // Perform a simple validation that email and password have been typed in
-    //   if (this.email != "" && this.password != "") {
-    //     this.login({ email: this.email, password: this.password });
-    //     this.password = "";
-    //   }
-    // },
-    login() {
-      if (!this.$refs.form.validate()) {
-        // this.snackbar = true;
-        window.console.log("LOGIN INVALID");
-        return;
-      }
-      window.console.log("LOGIN OK");
-    },
     handleSubmit(e) {
       this.show = false;
       if (e.target.innerText === "LOGIN") {
-        window.console.log("LOGIN");
-
-        if (!this.$refs.form.validate()) {
+        if (this.$refs.form.validate()) {
           // this.snackbar = true;
-          window.console.log("INVALID LOGIN");
-          return;
+          // return;
+          this.login({ email: this.email, password: this.password });
+          return
+          this.email = "";
+          this.password = "";
+          (this.cpassword = ""), (this.username = "");
         }
-
-        window.console.log("1", this.email);
-        window.console.log("2", this.password);
-        this.login({ email: this.email, password: this.password });
-        this.password = "";
       }
 
       if (e.target.innerText === "SIGN UP") {
-        window.console.log("SIGN UP");
-
         if (!this.$refs.form1.validate()) {
-          // this.snackbar = true;
-          window.console.log("SIGNUP INVALID");
           return;
         }
-
-        window.console.log("1", this.email);
-        window.console.log("1-username", this.username);
-        window.console.log("2", this.password);
       }
     }
   }
