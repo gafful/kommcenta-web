@@ -1,4 +1,5 @@
 import ApiService from './api.service'
+import FirebaseService from './firebase.service'
 import { TokenService } from './storage.service'
 
 
@@ -19,22 +20,23 @@ const UserService = {
      * @throws AuthenticationError 
     **/
     login: async function(email, password) {
-        const requestData = {
-            method: 'post',
-            url: "/o/token/",
-            data: {
-                grant_type: 'password',
-                username: email,
-                password: password
-            },
-            auth: {
-                username: process.env.VUE_APP_CLIENT_ID,
-                password: process.env.VUE_APP_CLIENT_SECRET
-            }
-        }
+        // const requestData = {
+        //     method: 'post',
+        //     url: "/o/token/",
+        //     data: {
+        //         grant_type: 'password',
+        //         username: email,
+        //         password: password
+        //     },
+        //     auth: {
+        //         username: process.env.VUE_APP_CLIENT_ID,
+        //         password: process.env.VUE_APP_CLIENT_SECRET
+        //     }
+        // }
 
         try {
-            const response = await ApiService.customRequest(requestData)
+            // const response = await ApiService.customRequest(requestData)
+            const response = await FirebaseService.login(email, password)
             
             TokenService.saveToken(response.data.access_token)
             TokenService.saveRefreshToken(response.data.refresh_token)
@@ -46,7 +48,12 @@ const UserService = {
 
             return response.data.access_token
         } catch (error) {
-            throw new AuthenticationError(error.response.status, error.response.data.detail)
+            window.console.log('firebase-error:', error)
+            let message = error.message
+            if(error.code === 'auth/user-not-found'){
+                message = 'Account not registered. Sign up instead.'
+            }
+            throw new AuthenticationError(error.code, message)
         }
     },
 

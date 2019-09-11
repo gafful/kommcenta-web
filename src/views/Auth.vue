@@ -66,6 +66,17 @@
       </v-window-item>
     </v-window>
 
+    <div>
+      <v-alert
+        type="error"
+        text
+        prominent
+        dismissible
+        :value="authenticationError !== ''"
+        transition="scale-transition"
+      >{{ authenticationError }}</v-alert>
+    </div>
+
     <div class="text-center">
       <v-btn
         class="mr-4"
@@ -167,10 +178,10 @@ export default {
           // this.snackbar = true;
           // return;
           this.login({ email: this.email, password: this.password });
-          return
-          this.email = "";
-          this.password = "";
-          (this.cpassword = ""), (this.username = "");
+          // return
+          // this.email = "";
+          // this.password = "";
+          // (this.cpassword = ""), (this.username = "");
         }
       }
 

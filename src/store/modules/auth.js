@@ -41,10 +41,10 @@ const actions = {
 
             return true
         } catch (e) {
+            window.console.log('auth-error:', e)
             if (e instanceof AuthenticationError) {
                 commit('loginError', { errorCode: e.errorCode, errorMessage: e.message })
             }
-
             return false
         }
     },
@@ -76,6 +76,10 @@ const actions = {
         }
 
         return state.refreshTokenPromise
+    },
+
+    clearErrors({ commit }) {
+        commit('clearErrors')
     }
 }
 
@@ -103,6 +107,11 @@ const mutations = {
 
     refreshTokenPromise(state, promise) {
         state.refreshTokenPromise = promise
+    },
+
+    clearErrors(state) {
+        state.authenticationError = ''
+        state.authenticationErrorCode = ''
     }
 }
 

@@ -35,6 +35,7 @@
 <script>
 import Main from "./views/Main";
 import AuthModal from "./views/Auth";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -44,6 +45,14 @@ export default {
   },
   data: () => ({
     dialog: false
-  })
+  }),
+  methods: {
+    ...mapActions("auth", ["clearErrors"]),
+  },
+  watch: {
+    dialog () {
+      this.clearErrors()
+    }
+  }
 };
 </script>
