@@ -27,6 +27,14 @@ const getters = {
 
     authenticating: (state) => {
         return state.authenticating
+    },
+
+    emailVerified: (state) => {
+        return state.emailVerified
+    },
+
+    shouldVerifyEmail: (state) => {
+        return state.shouldVerifyEmail
     }
 }
 

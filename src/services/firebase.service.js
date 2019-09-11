@@ -29,6 +29,17 @@ const FirebaseService = {
         //   });          
     },
 
+    sendEmailVerification() {
+        var user = firebase.auth().currentUser;
+        return user.sendEmailVerification()
+        // .then(function () {
+        //     // Email sent.
+        // }).catch(function (error) {
+        //     // An error happened.
+        // });
+
+    },
+
 }
 
 export default FirebaseService

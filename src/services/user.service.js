@@ -118,10 +118,13 @@ const UserService = {
             // //       but don't worry about this just yet - I'll come back to it later
             // ApiService.mount401Interceptor();
 
+            // Send verification email
+            FirebaseService.sendEmailVerification()
+
             return response.user
         } catch (error) {
             let message = error.message
-            window.console.log('sign-up-response', error)
+            window.console.log('sign-up-error', error)
             // if(error.code === 'auth/user-not-found'){
             //     message = 'Account not registered. Sign up instead.'
             // }

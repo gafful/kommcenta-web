@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="headline">LOG0 HeRe</v-card-title>
-    <v-row justify="space-around">
+    <v-row justify="space-around" v-if="step !== 3">
       <v-icon large color="green darken-2">mdi-google</v-icon>
       <v-icon large color="blue darken-2">mdi-facebook</v-icon>
       <v-icon large color="purple darken-2">mdi-twitter</v-icon>
@@ -67,7 +67,10 @@
 
       <v-window-item :value="3">
         <v-card>
-          <v-card-text>Verify your email to continue.</v-card-text>
+          <v-card-text>
+            A verification email has been sent.
+            Verify your email to continue.
+          </v-card-text>
         </v-card>
       </v-window-item>
     </v-window>
@@ -83,7 +86,7 @@
       >{{ authenticationError }}</v-alert>
     </div>
 
-    <div class="text-center">
+    <div class="text-center" v-if="step !== 3">
       <v-btn
         class="mr-4"
         color="indigo"
@@ -102,7 +105,7 @@
 
     <v-divider></v-divider>
 
-    <v-card-actions>
+    <v-card-actions v-if="step !== 3">
       <v-btn text x-small @click="step--">Forgot Password</v-btn>
       <div class="flex-grow-1"></div>
       <v-btn text x-small @click="step++">{{ otherBtn }}</v-btn>
@@ -201,8 +204,8 @@ export default {
     }
   },
   watch: {
-    shouldVerifyEmail (){
-      this.step = 3
+    shouldVerifyEmail() {
+      this.step = 3;
     }
   }
 };
