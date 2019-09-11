@@ -48,7 +48,6 @@ const UserService = {
 
             return response.data.access_token
         } catch (error) {
-            window.console.log('firebase-error:', error)
             let message = error.message
             if(error.code === 'auth/user-not-found'){
                 message = 'Account not registered. Sign up instead.'
@@ -104,7 +103,31 @@ const UserService = {
         
         // NOTE: Again, we'll cover the 401 Interceptor a bit later. 
         ApiService.unmount401Interceptor()
-    }
+    },
+
+    signUp: async function(email, password) {
+        try {
+            // const response = await ApiService.customRequest(requestData)
+            const response = await FirebaseService.signUp(email, password)
+            window.console.log('sign-up-response', response)
+            TokenService.saveToken(response.user.uid)
+            TokenService.saveRefreshToken(response.user.refreshToken)
+            ApiService.setHeader()
+            
+            // // NOTE: We haven't covered this yet in our ApiService 
+            // //       but don't worry about this just yet - I'll come back to it later
+            // ApiService.mount401Interceptor();
+
+            return response.user
+        } catch (error) {
+            let message = error.message
+            window.console.log('sign-up-response', error)
+            // if(error.code === 'auth/user-not-found'){
+            //     message = 'Account not registered. Sign up instead.'
+            // }
+            throw new AuthenticationError(error.code, message)
+        }
+    },
 }
 
 export default UserService

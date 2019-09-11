@@ -16,13 +16,13 @@
           <v-text-field
             label="Password"
             v-model="password"
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[passwordRules.required, passwordRules.min]"
-            :type="show ? 'text' : 'password'"
+            :type="showPass ? 'text' : 'password'"
             name="password"
             hint="At least 8 characters"
             counter
-            @click:append="show = !show"
+            @click:append="showPass = !showPass"
           ></v-text-field>
         </v-form>
         <!-- </v-card-text> -->
@@ -42,27 +42,33 @@
           <v-text-field
             label="Password"
             v-model="password"
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[passwordRules.required, passwordRules.min]"
-            :type="show ? 'text' : 'password'"
+            :type="showPass ? 'text' : 'password'"
             name="password"
             hint="At least 8 characters"
             counter
-            @click:append="show = !show"
+            @click:append="showPass = !showPass"
           ></v-text-field>
           <v-text-field
             label="Confirm Password"
             v-model="cpassword"
-            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             :rules="[passwordRules.required, passwordRules.emailMatch]"
-            :type="show ? 'text' : 'password'"
+            :type="showPass ? 'text' : 'password'"
             name="cpassword"
             counter
-            @click:append="show = !show"
+            @click:append="showPass = !showPass"
           ></v-text-field>
           <span class="caption grey--text text--darken-1">Please enter a password for your account</span>
         </v-form>
         <!-- </v-card-text> -->
+      </v-window-item>
+
+      <v-window-item :value="3">
+        <v-card>
+          <v-card-text>Verify your email to continue.</v-card-text>
+        </v-card>
       </v-window-item>
     </v-window>
 
@@ -116,7 +122,7 @@ export default {
       cpassword: "",
       username: "",
       step: 1,
-      show: false,
+      showPass: false,
       name: "",
       nameRules: [
         v => !!v || "Name is required",
@@ -137,6 +143,8 @@ export default {
   },
   computed: {
     ...mapGetters("auth", [
+      "emailVerified",
+      "shouldVerifyEmail",
       "authenticating",
       "authenticationError",
       "authenticationErrorCode"
@@ -170,9 +178,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions("auth", ["login"]),
+    ...mapActions("auth", ["login", "signUp"]),
     handleSubmit(e) {
-      this.show = false;
+      this.showPass = false;
       if (e.target.innerText === "LOGIN") {
         if (this.$refs.form.validate()) {
           // this.snackbar = true;
@@ -186,10 +194,15 @@ export default {
       }
 
       if (e.target.innerText === "SIGN UP") {
-        if (!this.$refs.form1.validate()) {
-          return;
+        if (this.$refs.form1.validate()) {
+          this.signUp({ email: this.email, password: this.password });
         }
       }
+    }
+  },
+  watch: {
+    shouldVerifyEmail (){
+      this.step = 3
     }
   }
 };

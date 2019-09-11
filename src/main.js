@@ -9,11 +9,8 @@ import { TokenService } from './services/storage.service'
 import { firebaseConfig } from './utils/app.utils'
 
 Vue.config.productionTip = false
-// Vue.prototype.$log = console.log.bind(console)
 
 ApiService.init(process.env.VUE_APP_ROOT_API)
-window.console.log('VUE_APP_ROOT_API', process.env.VUE_APP_ROOT_API)
-window.console.log('firebase-config', firebaseConfig())
 FirebaseService.init(firebaseConfig())
 
 // If token exists set header

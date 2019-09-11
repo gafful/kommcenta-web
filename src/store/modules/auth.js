@@ -7,7 +7,9 @@ const state = {
     authenticating: false,
     accessToken: TokenService.getToken(),
     authenticationErrorCode: 0,
-    authenticationError: ''
+    authenticationError: '',
+    emailVerified: false,
+    shouldVerifyEmail: false,
 }
 
 const getters = {
@@ -41,7 +43,6 @@ const actions = {
 
             return true
         } catch (e) {
-            window.console.log('auth-error:', e)
             if (e instanceof AuthenticationError) {
                 commit('loginError', { errorCode: e.errorCode, errorMessage: e.message })
             }
@@ -53,6 +54,25 @@ const actions = {
         UserService.logout()
         commit('logoutSuccess')
         router.push('/login')
+    },
+
+    async signUp({ commit }, { email, password }) {
+        commit('signupRequest');
+
+        try {
+            const user = await UserService.signUp(email, password);
+            commit('signupSuccess', user.uid, user.emailVerified)
+
+            // Redirect the user to the page he first tried to visit or to the home view
+            // router.push(router.history.current.query.redirect || '/');
+
+            return true
+        } catch (e) {
+            if (e instanceof AuthenticationError) {
+                commit('signupError', { errorCode: e.errorCode, errorMessage: e.message })
+            }
+            return false
+        }
     },
 
     refreshToken({ commit, state }) {
@@ -103,6 +123,25 @@ const mutations = {
 
     logoutSuccess(state) {
         state.accessToken = ''
+    },
+
+    signupRequest(state) {
+        state.authenticating = true;
+        state.authenticationError = ''
+        state.authenticationErrorCode = 0
+    },
+
+    signupSuccess(state, accessToken, emailVerified) {
+        state.accessToken = accessToken
+        state.authenticating = false;
+        state.emailVerified = emailVerified;
+        state.shouldVerifyEmail = !emailVerified;
+    },
+
+    signupError(state, { errorCode, errorMessage }) {
+        state.authenticating = false
+        state.authenticationErrorCode = errorCode
+        state.authenticationError = errorMessage
     },
 
     refreshTokenPromise(state, promise) {

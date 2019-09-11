@@ -11,16 +11,14 @@ const FirebaseService = {
     },
 
     login(email, password) {
-        window.console.log('email, password:', email, password)
-        // try {
-            return firebase.auth().signInWithEmailAndPassword(email, password)
-        // } catch (error) {
-            
-        //     throw new AuthenticationError(error.code, message)
-        // }
+        // error: {code:"", message: ""}
+        // success: 
+        return firebase.auth().signInWithEmailAndPassword(email, password)
     },
 
     signUp(email, password) {
+        // error: {code:"", message: ""}
+        // success: 
         return firebase.auth().createUserWithEmailAndPassword(email, password)
 
         // .catch(function(error) {
