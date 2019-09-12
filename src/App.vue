@@ -16,14 +16,28 @@
       <template v-else>
         <label>Email</label>
         <input placeholder="Enter your email address">
-      </template> -->
-      <v-dialog v-model="dialog" max-width="290">
+      </template>-->
+      <v-dialog v-model="dialog" max-width="290" v-if="emailVerified">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark v-on="on">Login</v-btn>
         </template>
         <AuthModal />
       </v-dialog>
-      <!-- <v-btn class="ma-2" outlined color="indigo">Sign Up</v-btn> -->
+      <v-menu top :offset-y="offsetY" v-else>
+        <template v-slot:activator="{ on }">
+          <!-- <v-btn color="primary" dark v-on="on">Dropdown</v-btn> -->
+          <v-icon large color="blue-grey darken-2" v-on="on">mdi-account-circle</v-icon>
+        </template>
+
+        <v-list>
+          <v-list-item v-for="(item, index) in items" :key="index">
+            <v-list-item-title @click="profile(index)">{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <!-- <h1 v-if="!true">Vue is awesome!</h1>
+      <h1 v-else>Oh no 😢</h1>-->
     </v-app-bar>
 
     <v-content>
@@ -35,7 +49,7 @@
 <script>
 import Main from "./views/Main";
 import AuthModal from "./views/Auth";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -44,14 +58,30 @@ export default {
     AuthModal
   },
   data: () => ({
-    dialog: false
+    dialog: false,
+    offsetY: true,
+    items: [
+      { title: "Sign out" },
+    ]
   }),
+  computed: {
+    ...mapGetters("auth", ["emailVerified"])
+  },
   methods: {
     ...mapActions("auth", ["clearErrors"]),
+    profile(idx){
+      switch (idx) {
+        case 0:
+          window.console.log(idx)
+          break;
+        default:
+          break;
+      }
+    }
   },
   watch: {
-    dialog () {
-      this.clearErrors()
+    dialog() {
+      this.clearErrors();
     }
   }
 };
