@@ -19,7 +19,7 @@ const UserService = {
      * @returns access_token
      * @throws AuthenticationError 
     **/
-    login: async function(email, password) {
+    login: async function (email, password) {
         // const requestData = {
         //     method: 'post',
         //     url: "/o/token/",
@@ -37,19 +37,19 @@ const UserService = {
         try {
             // const response = await ApiService.customRequest(requestData)
             const response = await FirebaseService.login(email, password)
-            
-            TokenService.saveToken(response.data.access_token)
-            TokenService.saveRefreshToken(response.data.refresh_token)
+
+            TokenService.saveToken(response.user.uid)
+            TokenService.saveRefreshToken(response.user.refreshToken)
             ApiService.setHeader()
-            
+
             // NOTE: We haven't covered this yet in our ApiService 
             //       but don't worry about this just yet - I'll come back to it later
             ApiService.mount401Interceptor();
 
-            return response.data.access_token
+            return response.user
         } catch (error) {
             let message = error.message
-            if(error.code === 'auth/user-not-found'){
+            if (error.code === 'auth/user-not-found') {
                 message = 'Account not registered. Sign up instead.'
             }
             throw new AuthenticationError(error.code, message)
@@ -59,7 +59,7 @@ const UserService = {
     /**
      * Refresh the access token.
     **/
-    refreshToken: async function() {
+    refreshToken: async function () {
         const refreshToken = TokenService.getRefreshToken()
 
         const requestData = {
@@ -95,17 +95,24 @@ const UserService = {
      * 
      * Will also remove `Authorization Bearer <token>` header from future requests.
     **/
-    logout() {
+    logOut: async function() {
         // Remove the token and remove Authorization header from Api Service as well 
         TokenService.removeToken()
         TokenService.removeRefreshToken()
         ApiService.removeHeader()
-        
+        try {
+            FirebaseService.signOut()
+        } catch (error) {
+            // let message = error.message
+            window.console.log('logout-error', error)
+            // throw new AuthenticationError(error.code, message)
+        }
+
         // NOTE: Again, we'll cover the 401 Interceptor a bit later. 
         ApiService.unmount401Interceptor()
     },
 
-    signUp: async function(email, password) {
+    signUp: async function (email, password) {
         try {
             // const response = await ApiService.customRequest(requestData)
             const response = await FirebaseService.signUp(email, password)
@@ -113,7 +120,7 @@ const UserService = {
             TokenService.saveToken(response.user.uid)
             TokenService.saveRefreshToken(response.user.refreshToken)
             ApiService.setHeader()
-            
+
             // // NOTE: We haven't covered this yet in our ApiService 
             // //       but don't worry about this just yet - I'll come back to it later
             // ApiService.mount401Interceptor();

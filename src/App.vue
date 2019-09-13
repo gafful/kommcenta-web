@@ -17,7 +17,7 @@
         <label>Email</label>
         <input placeholder="Enter your email address">
       </template>-->
-      <v-dialog v-model="dialog" max-width="290" v-if="emailVerified">
+      <v-dialog v-model="dialog" max-width="290" v-if="!emailVerified">
         <template v-slot:activator="{ on }">
           <v-btn color="primary" dark v-on="on">Login</v-btn>
         </template>
@@ -50,6 +50,7 @@
 import Main from "./views/Main";
 import AuthModal from "./views/Auth";
 import { mapActions, mapGetters } from "vuex";
+import { AUTH_STATUS } from "./utils/app.utils";
 
 export default {
   name: "App",
@@ -60,19 +61,17 @@ export default {
   data: () => ({
     dialog: false,
     offsetY: true,
-    items: [
-      { title: "Sign out" },
-    ]
+    items: [{ title: "Sign out" }]
   }),
   computed: {
-    ...mapGetters("auth", ["emailVerified"])
+    ...mapGetters("auth", ["status", "emailVerified"])
   },
   methods: {
-    ...mapActions("auth", ["clearErrors"]),
-    profile(idx){
+    ...mapActions("auth", ["clearErrors", "logOut"]),
+    profile(idx) {
       switch (idx) {
         case 0:
-          window.console.log(idx)
+          this.logOut();
           break;
         default:
           break;
@@ -82,6 +81,15 @@ export default {
   watch: {
     dialog() {
       this.clearErrors();
+    },
+    status() {
+      // Same in effect as !emailVerified
+      // Issa workaround for the dialog showing on logout automagically
+      // Set it on login success
+      if (AUTH_STATUS.LOGGED_OUT === this.status) {
+        this.dialog = false
+        // this.step = 1;
+      }
     }
   }
 };

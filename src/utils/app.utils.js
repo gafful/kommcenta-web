@@ -9,3 +9,13 @@ export function firebaseConfig() {
         appId: process.env.VUE_APP_FIREBASE_CONFIG_APP_ID
     }
 }
+
+
+export const AUTH_STATUS = {
+    "IDLE": 0,
+    "AUTHENTICATING" : 1,
+    "LOGIN_ERR" : 2,
+    "SIGNUP_ERR" : 3,
+    "HAS_ACCOUNT" : 4,
+    "LOGGED_OUT" : 5,
+}

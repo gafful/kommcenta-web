@@ -106,14 +106,16 @@
     <v-divider></v-divider>
 
     <v-card-actions v-if="step !== 3">
-      <v-btn text x-small @click="step--">Forgot Password</v-btn>
+      <v-btn text x-small>Forgot Password</v-btn>
       <div class="flex-grow-1"></div>
-      <v-btn text x-small @click="step++">{{ otherBtn }}</v-btn>
+      <v-btn text x-small @click="otherBtnFunc">{{ otherBtn }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { AUTH_STATUS } from "../utils/app.utils";
+
 export default {
   //   name: "login",
   data() {
@@ -146,12 +148,17 @@ export default {
   },
   computed: {
     ...mapGetters("auth", [
+      "status",
       "emailVerified",
-      "shouldVerifyEmail",
-      "authenticating",
       "authenticationError",
       "authenticationErrorCode"
     ]),
+    // ...mapGetters("auth", [
+    //   "shouldVerifyEmail",
+    //   "authenticating",
+    //   "authenticationError",
+    //   "authenticationErrorCode"
+    // ]),
     currentBtn() {
       switch (this.step) {
         case 1:
@@ -178,10 +185,26 @@ export default {
       } else {
         return this.svalid;
       }
+    },
+    authenticating() {
+      return this.status === AUTH_STATUS.AUTHENTICATING;
     }
   },
   methods: {
     ...mapActions("auth", ["login", "signUp"]),
+    otherBtnFunc() {
+      window.console.log("otherBtnFunc", this.step);
+      switch (this.step) {
+        case 1:
+          this.step++;
+          break;
+        case 2:
+          this.step--;
+          break;
+        default:
+          this.step = 1;
+      }
+    },
     handleSubmit(e) {
       this.showPass = false;
       if (e.target.innerText === "LOGIN") {
@@ -204,9 +227,13 @@ export default {
     }
   },
   watch: {
-    shouldVerifyEmail() {
-      this.step = 3;
-    }
+    status() {
+      if (AUTH_STATUS.HAS_ACCOUNT === this.status) {
+        this.step = 3;
+      } else if (AUTH_STATUS.LOGGED_OUT === this.status) {//Change to emailVerified?....
+        this.step = 1;
+      }
+    },
   }
 };
 </script>
